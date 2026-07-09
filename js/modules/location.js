@@ -24,6 +24,11 @@ const LocationModule = (() => {
       errorKm = result.errorKm;
     }
 
+    if (isNaN(errorKm) || errorKm > 500) {
+      _result = null;
+      return null;
+    }
+
     _result = { ...result, errorKm };
     return _result;
   }
@@ -32,7 +37,7 @@ const LocationModule = (() => {
 
   function renderResult(container, result, scenario) {
     if (!result) {
-      container.innerHTML = `<div class="result-box"><span class="label">${i18n.t('moduleA.needThreeStations')}</span></div>`;
+      container.innerHTML = `<div class="result-box"><span style="color:var(--accent-red)">定位發散，請檢查 P/S 波標記是否正確</span></div>`;
       return;
     }
 
