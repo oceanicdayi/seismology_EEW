@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌋 地震測報 AI 與科學知識庫 (Serverless)</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="基於 Gradio-lite 的無伺服器 (Serverless) 地震測報 AI 與科學互動知識庫。由 WebAssembly (Pyodide) 驅動，無須後端伺服器即可在瀏覽器運行簡報萃取知識與圖文展示。">
+    
+    <!-- Gradio Lite CSS and JS (Pinned to stable 4.43.2 to avoid huggingface-hub dependency issues in Pyodide) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gradio/lite@4.43.2/dist/lite.css" />
+    <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@gradio/lite@4.43.2/dist/lite.js"></script>
+
+    <style>
+        /* 避免在載入完成前顯示 raw text code */
+        gradio-lite:not(:defined) {
+            display: none;
+        }
+
+        /* 漸層載入畫面樣式 */
+        #loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0b0f19;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #f1f5f9;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 當 gradio-lite 定義完成後隱藏載入畫面 */
+        gradio-lite:defined ~ #loading-container {
+            display: none !important;
+        }
+
+        /* 旋轉動畫 */
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(96, 165, 250, 0.1);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            border-bottom-color: #8b5cf6;
+            animation: spin 1.5s linear infinite;
+            margin-bottom: 24px;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .loading-subtitle {
+            font-size: 15px;
+            color: #94a3b8;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .pulse-wave {
+            margin-top: 15px;
+            height: 4px;
+            width: 100px;
+            background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+            background-size: 200% 100%;
+            animation: wave 2s linear infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes wave {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Gradio-lite Web App Container -->
+    <gradio-lite theme="dark">
+        <gradio-requirements>
+            huggingface-hub==0.24.7
+        </gradio-requirements>
+        <gradio-file name="app.py" entrypoint>
+import sys
+import types
+from importlib.machinery import ModuleSpec
+
+# 模擬 termios 模組以防止 huggingface_hub 在 Pyodide (WebAssembly) 環境下因缺少 termios 而崩潰
+if "termios" not in sys.modules:
+    termios_mock = types.ModuleType("termios")
+    termios_mock.error = Exception
+    termios_mock.TCSADRAIN = 1
+    termios_mock.tcgetattr = lambda fd: [0, 0, 0, 0, 0, 0, [0]*32]
+    termios_mock.tcsetattr = lambda fd, when, attributes: None
+    sys.modules["termios"] = termios_mock
+
+# 模擬 huggingface_hub 及其所有子模組，避免在 Pyodide/WebAssembly 中因依賴問題導致載入崩潰
+class MockModule(types.ModuleType):
+    def __init__(self, name):
+        super().__init__(name)
+    def __getattr__(self, name):
+        if name[0].isupper():
+            class DummyClass(Exception):
+                pass
+            DummyClass.__name__ = name
+            return DummyClass
+        else:
+            def dummy_function(*args, **kwargs):
+                return {}
+            return dummy_function
+
+class MockLoader:
+    def create_module(self, spec):
+        return MockModule(spec.name)
+    def exec_module(self, module):
+        pass
+
+class MockFinder:
+    def find_spec(self, fullname, path, target=None):
+        if fullname == "huggingface_hub" or fullname.startswith("huggingface_hub."):
+            return ModuleSpec(fullname, MockLoader())
+        return None
+
+sys.meta_path.insert(0, MockFinder())
+
+import os
+import json
+import re
+import gradio as gr
+from pyodide.http import pyfetch
+from js import window
+
+# 動態從當前瀏覽器 URL 取得基底路徑，以支援部署到任意子路徑 (如 HF Static Space)
+base_url = window.location.origin + window.location.pathname.rsplit('/', 1)[0]
+
+async def fetch_json(relative_path):
+    """異步獲取相對路徑的 JSON 檔案"""
+    url = f"{base_url}/{relative_path}"
+    response = await pyfetch(url)
+    if response.status == 200:
+        return await response.json()
+    else:
+        raise Exception(f"無法讀取靜態資源 {url}: 狀態碼 {response.status}")
+
+# 1. 頂層載入專案索引檔案
+try:
+    PROJECT_NAMES = await fetch_json("data/projects.json")
+except Exception as e:
+    print(f"載入 projects.json 失敗: {e}")
+    PROJECT_NAMES = []
+
+# 專案投影片快取，避免重複請求
+PROJECTS_CACHE = {}
+
+async def get_project_slides(project_name):
+    """獲取指定專案的投影片資料（具備快取功能）"""
+    if not project_name or project_name == "無可用專案":
+        return []
+    if project_name not in PROJECTS_CACHE:
+        try:
+            slides = await fetch_json(f"data/{project_name}/slides.json")
+            PROJECTS_CACHE[project_name] = slides
+        except Exception as e:
+            print(f"載入專案 {project_name} 失敗: {e}")
+            PROJECTS_CACHE[project_name] = []
+    return PROJECTS_CACHE[project_name]
+
+# 初始化第一個專案與其投影片
+initial_project = PROJECT_NAMES[0] if PROJECT_NAMES else "無可用專案"
+initial_slides = await get_project_slides(initial_project)
+initial_slide_choices = [f"{s['slide_num']}. {s['title']}" for s in initial_slides]
+initial_slide_val = initial_slide_choices[0] if initial_slide_choices else None
+
+def format_content_to_markdown(paragraphs):
+    """將提取的文字與表格段落格式化為漂亮的 Markdown 格式"""
+    formatted_paras = []
+    i = 0
+    while i < len(paragraphs):
+        para = paragraphs[i]
+        # 偵測是否為表格行 (通常包含 '|' 且多於兩個欄位)
+        if "|" in para:
+            table_lines = []
+            while i < len(paragraphs) and "|" in paragraphs[i]:
+                table_lines.append(paragraphs[i])
+                i += 1
+            
+            # 組裝 Markdown Table
+            if table_lines:
+                markdown_table = []
+                for idx, line in enumerate(table_lines):
+                    cols = [c.strip() for c in line.split("|")]
+                    # 確保前後都有 '|'
+                    markdown_table.append("| " + " | ".join(cols) + " |")
+                    # 在首行（表頭）後插入 Markdown 的表頭分隔線
+                    if idx == 0:
+                        seps = ["---"] * len(cols)
+                        markdown_table.append("| " + " | ".join(seps) + " |")
+                formatted_paras.append("\n".join(markdown_table))
+            continue
+        else:
+            # 是一般文字段落
+            formatted_paras.append(para)
+            i += 1
+            
+    return "\n\n".join(formatted_paras)
+
+def get_images_html(project_name, slide_images):
+    """生成投影片所屬圖片的精美展示 HTML，支援直接瀏覽器相對路徑載入"""
+    if not slide_images or project_name == "無可用專案":
+        return "<p style='color: #8892b0; font-style: italic; text-align: center; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 8px;'>📷 此張投影片無擷取之嵌入圖片</p>"
+    
+    html = "<div style='display: flex; flex-direction: column; gap: 24px; align-items: center; width: 100%; padding-top: 10px;'>"
+    for img in slide_images:
+        # 指向當前 Space 網頁伺服器託管的靜態圖片相對路徑
+        img_url = f"./data/{project_name}/images/{img}"
+        
+        _, ext = os.path.splitext(img.lower())
+        
+        if ext in ['.wmf', '.emf']:
+            # WMF/EMF 向量圖下載區塊
+            html += f"""
+            <div style='border: 1px dashed rgba(245, 158, 11, 0.4); padding: 20px; border-radius: 12px; background-color: rgba(245, 158, 11, 0.05); text-align: center; width: 100%; max-width: 600px;'>
+                <div style='font-size: 28px; margin-bottom: 8px;'>⚠️</div>
+                <p style='margin: 0; color: #fbbf24; font-weight: 600; font-size: 16px;'>向量圖格式 ({img})</p>
+                <p style='margin: 6px 0 16px 0; font-size: 13px; color: #94a3b8; line-height: 1.5;'>此圖片為 Windows Metafile 向量圖格式，瀏覽器不支援直接在網頁顯示，請點選下方按鈕下載查看。</p>
+                <a href='{img_url}' download style='display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);'>下載原始 WMF 向量圖</a>
+            </div>
+            """
+        else:
+            html += f"""
+            <div style='width: 100%; max-width: 700px; text-align: center; background: rgba(255,255,255,0.01); padding: 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);'>"""
+            html += "<" + f"img src='{img_url}' style='max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); margin: 0 auto; display: block;' />"
+            html += f"""
+                <div style='margin-top: 8px; display: flex; justify-content: space-between; align-items: center; padding: 0 8px;'>
+                    <span style='color: #64748b; font-size: 11px; font-family: monospace;'>{img}</span>
+                    <a href='{img_url}' target='_blank' style='color: #60a5fa; font-size: 11px; text-decoration: none; border-bottom: 1px dashed #60a5fa;'>在新視窗打開 ↗</a>
+                </div>
+            </div>
+            """
+    html += "</div>"
+    return html
+
+async def update_slide_dropdown(project_name):
+    """當選定專案變更時，更新投影片下拉選單"""
+    slides = await get_project_slides(project_name)
+    slide_choices = [f"{s['slide_num']}. {s['title']}" for s in slides]
+    default_val = slide_choices[0] if slide_choices else None
+    return gr.update(choices=slide_choices, value=default_val)
+
+async def display_slide(project_name, slide_choice):
+    """展示特定專案的投影片"""
+    if not project_name or not slide_choice or project_name == "無可用專案":
+        return "# 請選擇專案與投影片", "", ""
+        
+    try:
+        slide_num = int(slide_choice.split(".")[0])
+    except (ValueError, IndexError):
+        return "# 格式錯誤", "", ""
+        
+    slides = await get_project_slides(project_name)
+    slide = next((s for s in slides if s["slide_num"] == slide_num), None)
+    
+    if not slide:
+        return "# 找不到投影片", "", ""
+        
+    title_md = f"# {slide['title']}"
+    text_md = format_content_to_markdown(slide["paragraphs"])
+    images_html = get_images_html(project_name, slide["images"])
+    
+    return title_md, text_md, images_html
+
+async def navigate_slide(project_name, slide_choice, direction):
+    """上一張或下一張投影片"""
+    if not project_name or not slide_choice or project_name == "無可用專案":
+        return slide_choice
+        
+    try:
+        current_num = int(slide_choice.split(".")[0])
+    except (ValueError, IndexError):
+        return slide_choice
+        
+    slides = await get_project_slides(project_name)
+    total_slides = len(slides)
+    if total_slides <= 1:
+        return slide_choice
+        
+    if direction == "next":
+        new_num = current_num + 1
+        if new_num > total_slides:
+            new_num = 1  # 循環回到第一張
+    else:
+        new_num = current_num - 1
+        if new_num < 1:
+            new_num = total_slides  # 循環到最後一張
+            
+    # 尋找對應的選項字串
+    for s in slides:
+        if s["slide_num"] == new_num:
+            return f"{s['slide_num']}. {s['title']}"
+            
+    return slide_choice
+
+async def search_slides(query):
+    """關鍵字全域搜尋，回傳符合的投影片下拉選項"""
+    if not query or not query.strip():
+        return gr.update(choices=[], label="搜尋結果"), "請輸入關鍵字進行搜尋..."
+        
+    query_str = query.strip().lower()
+    choices = []
+    
+    for proj_name in PROJECT_NAMES:
+        if proj_name == "無可用專案":
+            continue
+        slides = await get_project_slides(proj_name)
+        for slide in slides:
+            match = False
+            # 搜尋標題
+            if query_str in slide["title"].lower():
+                match = True
+            # 搜尋段落內容
+            else:
+                for para in slide["paragraphs"]:
+                    if query_str in para.lower():
+                        match = True
+                        break
+            
+            if match:
+                # 建立易讀的選擇字串
+                choice_str = f"【{proj_name}】Slide {slide['slide_num']}: {slide['title']}"
+                choices.append(choice_str)
+                
+    if not choices:
+        return gr.update(choices=[], label="搜尋結果 (0)"), "❌ 未找到包含該關鍵字的投影片"
+        
+    status_msg = f"🔍 找到 {len(choices)} 筆符合結果！請在下方下拉選單點選跳轉。"
+    return gr.update(choices=choices, label=f"搜尋結果 ({len(choices)})", value=choices[0]), status_msg
+
+async def jump_to_search_result(search_choice):
+    """點擊搜尋結果，直接跳轉並更新專案與投影片選單"""
+    if not search_choice:
+        return gr.update(), gr.update()
+        
+    # 解析 "【專案名稱】Slide 投影片編號: 標題"
+    match = re.match(r"【(.*?)】Slide (\d+): (.*)", search_choice)
+    if not match:
+        return gr.update(), gr.update()
+        
+    project_name = match.group(1)
+    slide_num = int(match.group(2))
+    
+    slides = await get_project_slides(project_name)
+    slide_choices = [f"{s['slide_num']}. {s['title']}" for s in slides]
+    
+    # 尋找對應的投影片選項值
+    target_slide_choice = None
+    for choice in slide_choices:
+        if choice.startswith(f"{slide_num}."):
+            target_slide_choice = choice
+            break
+            
+    if not target_slide_choice:
+        target_slide_choice = slide_choices[0] if slide_choices else None
+        
+    # 回傳：更新專案下拉選單的值、投影片下拉選單的(choices, value)
+    return project_name, gr.update(choices=slide_choices, value=target_slide_choice)
+
+# 自訂進階 CSS，使用 HSL 與漸層調色板
+CSS = """
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+body, .gradio-container {
+    font-family: 'Outfit', 'Noto Sans TC', -apple-system, sans-serif !important;
+    background-color: #0b0f19 !important;
+    color: #f1f5f9 !important;
+}
+
+/* 頂部標題 */
+.header-container {
+    text-align: center;
+    padding: 30px 20px 20px 20px;
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(11, 15, 25, 0) 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 25px;
+}
+
+.header-title {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+}
+
+.header-subtitle {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 玻璃擬態面板 */
+.glass-panel {
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    box-shadow: 0 15px 35px -12px rgba(0, 0, 0, 0.6) !important;
+    height: 100%;
+}
+
+.sidebar-panel {
+    background: rgba(15, 23, 42, 0.4) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 主按鈕 (漸層色) */
+.primary-btn {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 10px 20px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3) !important;
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
+    filter: brightness(1.1);
+}
+
+.primary-btn:active {
+    transform: translateY(0) !important;
+}
+
+/* 次按鈕 */
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.04) !important;
+    color: #f1f5f9 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s !important;
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* 導覽按鈕 */
+.nav-btn {
+    background: rgba(59, 130, 246, 0.1) !important;
+    color: #3b82f6 !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    font-size: 18px !important;
+}
+.nav-btn:hover {
+    background: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* 區塊標題 */
+.section-title {
+    color: #f8fafc;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-left: 4px solid #8b5cf6;
+    padding-left: 8px;
+}
+
+/* Markdown 排版美化 */
+.prose h1 {
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    color: #f8fafc !important;
+    border-bottom: 2px solid rgba(255,255,255,0.08) !important;
+    padding-bottom: 14px !important;
+    margin-top: 0 !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.prose p {
+    font-size: 1.08rem !important;
+    line-height: 1.8 !important;
+    color: #cbd5e1 !important;
+    margin-bottom: 16px !important;
+}
+
+/* 投影片表格美化 */
+.prose table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 24px 0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+.prose th {
+    background: rgba(139, 92, 246, 0.15) !important;
+    color: #c084fc !important;
+    font-weight: 600 !important;
+    text-align: left !important;
+    padding: 14px 18px !important;
+    border-bottom: 2px solid rgba(139, 92, 246, 0.25) !important;
+    font-size: 1.05rem !important;
+}
+
+.prose td {
+    padding: 12px 18px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: #e2e8f0 !important;
+    background: rgba(30, 41, 59, 0.2) !important;
+    font-size: 1rem !important;
+}
+
+.prose tr:last-child td {
+    border-bottom: none !important;
+}
+
+.prose tr:hover td {
+    background: rgba(30, 41, 59, 0.4) !important;
+}
+
+/* 滾動條美化 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.01);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+"""
+
+# 創建 Gradio Blocks 應用程式介面
+with gr.Blocks(title="Seismic AI & Science Knowledge Base", css=CSS) as demo:
+    
+    # 頂部標頭
+    gr.HTML(f"""
+    <div class="header-container">
+        <h1 class="header-title">🌋 地震測報 AI 與科學知識庫</h1>
+        <p class="header-subtitle">
+            基於 Hugging Face Static Space 的 Serverless 網頁應用。自動化擷取並整合次世代地震預警技術、大型語言模型與 AI 代理群的簡報知識。
+        </p>
+    </div>
+    """)
+    
+    with gr.Row():
+        # 左側控制與搜尋面板
+        with gr.Column(scale=1, elem_classes=["glass-panel", "sidebar-panel"]):
+            
+            # 1. 專案選擇
+            gr.HTML("<div class='section-title'>📚 簡報專案選擇</div>")
+            project_selector = gr.Dropdown(
+                choices=PROJECT_NAMES if PROJECT_NAMES else ["無可用專案"],
+                value=initial_project,
+                label="選擇簡報 PDF / PPTX 專案",
+                interactive=True
+            )
+            
+            # 2. 投影片目錄選擇
+            gr.HTML("<div class='section-title'>📋 投影片目錄</div>")
+            slide_selector = gr.Dropdown(
+                choices=initial_slide_choices if initial_slide_choices else [],
+                value=initial_slide_val,
+                label="選擇投影片頁數與標題",
+                interactive=True
+            )
+            
+            # 3. 快速導覽按鈕
+            with gr.Row():
+                prev_btn = gr.Button("◀ 上一張", elem_classes=["secondary-btn", "nav-btn"])
+                next_btn = gr.Button("下一張 ▶", elem_classes=["secondary-btn", "nav-btn"])
+            
+            # 分隔線
+            gr.HTML("<hr style='border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 20px 0;'>")
+            
+            # 4. 全域搜尋引擎
+            gr.HTML("<div class='section-title'>🔍 簡報知識搜尋</div>")
+            search_input = gr.Textbox(
+                label="輸入關鍵字 (例如: AI, PWS, 規模, 預警)",
+                placeholder="請輸入欲查詢的地震或 AI 科技關鍵字...",
+                interactive=True
+            )
+            search_btn = gr.Button("搜尋投影片", elem_classes=["primary-btn"])
+            search_status = gr.HTML(
+                "<span style='color: #64748b; font-size: 13px;'>在所有簡報的文字內容中進行檢索</span>"
+            )
+            search_results = gr.Dropdown(
+                choices=[],
+                label="搜尋結果 (等待查詢)",
+                interactive=True
+            )
+        
+        # 右側內容展示面板
+        with gr.Column(scale=2, elem_classes=["glass-panel"]):
+            with gr.Tabs():
+                with gr.TabItem("📖 投影片內容"):
+                    slide_title = gr.Markdown(elem_classes=["prose"])
+                    slide_text = gr.Markdown(elem_classes=["prose"])
+                    
+                with gr.TabItem("📷 擷取圖片與圖表"):
+                    slide_images = gr.HTML()
+    
+    # ==========================================
+    # 定義互動事件 (Event Bindings)
+    # ==========================================
+    
+    # 1. 頁面加載初始化
+    demo.load(
+        fn=display_slide,
+        inputs=[project_selector, slide_selector],
+        outputs=[slide_title, slide_text, slide_images]
+    )
+    
+    # 2. 專案選擇變更事件：更新投影片目錄下拉選單
+    project_selector.change(
+        fn=update_slide_dropdown,
+        inputs=[project_selector],
+        outputs=[slide_selector]
+    )
+    
+    # 3. 投影片目錄選擇變更事件：更新投影片內容展示
+    slide_selector.change(
+        fn=display_slide,
+        inputs=[project_selector, slide_selector],
+        outputs=[slide_title, slide_text, slide_images]
+    )
+    
+    # 4. 上一張 / 下一張導覽事件
+    prev_btn.click(
+        fn=lambda p, s: navigate_slide(p, s, "prev"),
+        inputs=[project_selector, slide_selector],
+        outputs=[slide_selector]
+    )
+    
+    next_btn.click(
+        fn=lambda p, s: navigate_slide(p, s, "next"),
+        inputs=[project_selector, slide_selector],
+        outputs=[slide_selector]
+    )
+    
+    # 5. 關鍵字搜尋事件
+    search_btn.click(
+        fn=search_slides,
+        inputs=[search_input],
+        outputs=[search_results, search_status]
+    )
+    search_input.submit(
+        fn=search_slides,
+        inputs=[search_input],
+        outputs=[search_results, search_status]
+    )
+    
+    # 6. 點擊搜尋結果跳轉事件
+    search_results.change(
+        fn=jump_to_search_result,
+        inputs=[search_results],
+        outputs=[project_selector, slide_selector]
+    )
+
+# 啟動 Gradio 應用
+demo.launch()
+        </gradio-file>
+    </gradio-lite>
+
+    <!-- 漸層載入畫面 HTML 元件 -->
+    <div id="loading-container">
+        <div class="spinner"></div>
+        <div class="loading-title">🌋 地震科學互動知識庫</div>
+        <div class="loading-subtitle">正在瀏覽器中啟動 Pyodide 虛擬環境並載入 Gradio 介面。由於這需要下載完整的 Python 直譯器與 Gradio 執行階段，首次載入大約需要 10 - 15 秒，請您耐心等候...</div>
+        <div class="pulse-wave"></div>
+    </div>
+
+</body>
+</html>
