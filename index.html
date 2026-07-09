@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地震測報中心簡報資料</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif; background: #f0f2f5; color: #1a1a2e; line-height: 1.8; }
+  .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+  header { background: linear-gradient(135deg, #0f3460, #16213e); color: #fff; padding: 60px 20px; text-align: center; border-radius: 12px; margin-bottom: 30px; }
+  header h1 { font-size: 2rem; margin-bottom: 8px; }
+  header p { opacity: .85; font-size: 1.05rem; }
+  .file-list { margin-bottom: 40px; }
+  .file-list h2 { font-size: 1.3rem; margin-bottom: 12px; color: #0f3460; border-left: 4px solid #0f3460; padding-left: 12px; }
+  .file-card { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .file-card h3 { font-size: 1.05rem; margin-bottom: 4px; }
+  .file-card .meta { color: #666; font-size: .88rem; margin-bottom: 8px; }
+  .file-card p { color: #444; font-size: .95rem; }
+  .presentation { background: #fff; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 2px 12px rgba(0,0,0,.1); overflow: hidden; }
+  .presentation-header { background: #16213e; color: #fff; padding: 24px; }
+  .presentation-header h2 { font-size: 1.15rem; }
+  .presentation-header .sub { opacity: .8; font-size: .9rem; margin-top: 4px; }
+  .slide { padding: 28px 24px; border-bottom: 1px solid #e8e8e8; }
+  .slide:last-child { border-bottom: none; }
+  .slide h3 { font-size: .8rem; color: #888; margin-bottom: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; }
+  .slide .layout-badge { display: inline-block; background: #e8edf3; color: #555; font-size: .75rem; padding: 2px 10px; border-radius: 4px; margin-bottom: 12px; }
+  .slide h4 { font-size: 1.3rem; color: #0f3460; margin-bottom: 12px; }
+  .slide .content { font-size: .95rem; white-space: pre-wrap; color: #333; }
+  .slide .content strong { color: #1a1a2e; }
+  .slide table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: .88rem; }
+  .slide td, .slide th { border: 1px solid #d0d5dd; padding: 6px 10px; text-align: left; }
+  .slide th { background: #f2f4f7; font-weight: 600; }
+  .footer { text-align: center; padding: 30px 0; color: #888; font-size: .85rem; }
+  @media (max-width: 640px) {
+    header h1 { font-size: 1.4rem; }
+    .slide { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>地震測報中心簡報資料</h1>
+  <p>中央氣象署 地震測報中心 — 陳達毅 科長</p>
+</header>
+
+<section class="file-list">
+  <h2>檔案列表</h2>
+  <div class="file-card">
+    <h3>AI 代理群與大型語言模型在次世代地震測報之整合與應用</h3>
+    <div class="meta">2026/06/03 · 臺北市立大學資訊科學系演講</div>
+    <p>探討 AI Agent 與大型語言模型於地震測報之應用，涵蓋自監督學習、SeisWav2Vec 2.0、LEM 及 EEW 多代理協作系統。</p>
+  </div>
+  <div class="file-card">
+    <h3>臺灣地震預警系統的演進與發展</h3>
+    <div class="meta">2026/06/12 · 嘉義縣政府天然災害停班停課通報作業講習</div>
+    <p>介紹臺灣地震預警系統的歷史演進、測報原理、科技極限（誤報/漏報/海嘯），以及防災教育與公私協力。</p>
+  </div>
+</section>
+
+<section class="presentation">
+  <div class="presentation-header">
+    <h2>AI 代理群與大型語言模型在次世代地震測報之整合與應用</h2>
+    <div class="sub">2026/06/03 · 陳達毅 科長 · 臺北市立大學資訊科學系演講</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 1</h3>
+    <span class="layout-badge">標題投影片</span>
+    <div class="content"><strong>AI 代理群與大型語言模型在次世代地震測報之整合與應用</strong>
+
+陳達毅 科長
+
+中央氣象署 地震測報中心
+
+2026年臺北市立大學資訊科學系演講</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 2</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>在地震中心工作面臨的挑戰</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 3</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>競速開始</h4>
+    <div class="content">1999.9.21 集集地震
+2024.4.3 花蓮地震</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 4</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險 – 過去10年災害地震</h4>
+    <div class="content">• 2016/2/6 M6.6 美濃地震 (7級) — 臺南維冠大樓 — 621人員傷亡、749戶房屋損失
+• 2018/2/6 M6.2 花蓮地震 (7級) — 花蓮統帥飯店 — 308人員傷亡、195戶房屋損失
+• 2019/4/18 M6.3 花蓮地震 (7級) — 29人員傷亡
+• 2022/9/18 M6.8 池上地震 (6強) — 東里車站鐵道 — 108人員傷亡、34戶房屋損失
+• 2024/4/3 M7.1 花蓮地震 (6強) — 花蓮天王星大樓 — 1069人員傷亡、207戶房屋損失
+• 2025/1/21 M6.4 大埔地震 (6弱) — 1810戶房屋損失</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 5</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險</h4>
+    <div class="content">菲律賓海板塊與歐亞大陸板塊每年約以7至8公分的速度聚合，兩板塊持續擠壓碰撞導致臺灣地震頻繁發生。
+
+臺灣東部海域菲律賓海板塊向北隱沒到歐亞大陸板塊下，南部海域歐亞大陸板塊向東隱沒到菲律賓海板塊下。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 6</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險</h4>
+    <div class="content">1900年以來共發生7次大規模災害地震（罹難百人以上）
+
+• 每天 100 個地震
+• 每年 100 個顯著有感地震
+• 每 30~40 年 1 個大規模災害性地震</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 7</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>近年來嘉南地區災害性地震</h4>
+    <div class="content">2010, March, 4th M6.3 JiaXian Earthquake (Wu et al., 2011)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 8</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>近年來嘉南地區災害性地震</h4>
+    <div class="content">2016, February, 6th M6.6 Meinong Earthquake (Kanamori et al., 2017)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 9</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>近年來嘉南地區災害性地震</h4>
+    <div class="content">2025, January, 21st M6.4 Dapu Earthquake (Su et al., 2025)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 10</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震測報中心工作環境</h4>
+    <div class="content">員工人數約60人，24小時作業，全年無休</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 11</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震測報中心工作環境</h4>
+    <div class="content">員工人數約60人，24小時作業，全年無休</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 12</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震監測畫面</h4>
+    <div class="content">地震發生時值班同仁可以立刻掌握相關資訊</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 13</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>即時地震觀測網 — 巨量資料</h4>
+    <div class="content">約有3000個觀測頻道，每個頻道接收100H取樣率資料</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 14</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震監測系統架構</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 15</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震預警系統架構</h4>
+    <div class="content">CWA EEW System is available in Docker Hub: docker pull cwadayi/earthworm_ubuntu22.04_eew:v1
+
+透過獨立運作的模組與共享記憶體，建構地震資料處理系統</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 16</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震預警系統演算邏輯</h4>
+    <div class="content">偵測地震Ｐ波 ≫ 分群 ≫ 地震定位 ≫ 計算規模 ≫ 預估各地震度
+
+(Chen et al., 2019)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 17</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>科技極限與複合型災害 – 誤報</h4>
+    <div class="content">115年2月23日 馬來西亞婆羅洲外海地震導致誤發中小學EEW</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 18</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震預警系統演算邏輯</h4>
+    <div class="content">採用機器學習模型預估震度</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 19</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震預警系統演算邏輯</h4>
+    <div class="content">採用機器學習模型預估震度
+
+Epicenter → Use 3 sec P wave → Have 15 sec leading time → Use an AI Model → Provide Warnings !</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 20</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震預警系統演算邏輯</h4>
+    <div class="content">機器學習模型預估震度 — 實際案例</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 21</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用 Grafana 建構監控系統</h4>
+    <div class="content">Open-source platform for data visualization.
+Create dynamic dashboards from many sources.
+Supports diverse databases and data types.
+Real-time monitoring of metrics and logs.
+Customizable panels and query builders.
+Alerting capabilities for threshold breaches.
+Interactive graphs and data exploration.
+Community-driven, highly extensible.
+Visualize time-series and operational data.
+Enhances observability across systems.</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 22</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用 Grafana 建構監控系統</h4>
+    <div class="content">CWA OBS network — 即時監控海底地震觀測網水壓計資料</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 23</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用 Grafana 建構監控系統</h4>
+    <div class="content">即時監控地震觀測站資料延遲狀況</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 24</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用 Grafana 建構監控系統</h4>
+    <div class="content">即時監控地震預警系統發布情形</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 25</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用 Grafana 建構監控系統</h4>
+    <div class="content">即時展示特定地震站地震波形</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 26</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用即時逐秒觀測震度輔助地震預警系統</h4>
+    <div class="content">地震災害必須同時考慮強度與持續時間
+
+First EEW alert → Second EEW alert
+
+2024, April 3rd</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 27</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用即時逐秒觀測震度輔助地震預警系統</h4>
+    <div class="content">利用地震發生初期的觀測震度分佈評估是否該發布警報</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 28</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用即時逐秒觀測震度輔助地震預警系統</h4>
+    <div class="content">利用地震發生初期的觀測震度分佈評估是否該發布警報</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 29</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用即時逐秒觀測震度輔助地震預警系統</h4>
+    <div class="content">利用地震發生初期的觀測震度分佈評估是否該發布警報</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 30–31</h3>
+    <span class="layout-badge">空白</span>
+  </div>
+  <div class="slide">
+    <h3>Slide 32</h3>
+    <span class="layout-badge">空白</span>
+    <h4>基礎地震學研究發表</h4>
+    <div class="content">探討自監督學習在構建地震預訓練模型之有效性
+
+大型地震模型 (LEM)：地震監測的新紀元</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 33–36</h3>
+    <span class="layout-badge">自訂版面配置</span>
+    <h4>背景與緣起</h4>
+    <div class="content">傳統演算法於自動辨識地震波相上有大量參數需調整，且準確性難以提升
+
+近年來機器學習技術用於波相辨識有極大的突破</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 37–38</h3>
+    <span class="layout-badge">自訂版面配置</span>
+    <h4>資料來源</h4>
+    <div class="content">中央氣象署地震觀測網 — CWBSN + real-time TSMIP (550)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 39</h3>
+    <span class="layout-badge">自訂版面配置</span>
+    <h4>資料來源與資料前處理</h4>
+    <div class="content">人工標記P波與S波到時</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 40</h3>
+    <span class="layout-badge">自訂版面配置</span>
+    <h4>資料來源與資料前處理</h4>
+    <div class="content">資料擴增，增加資料集的多樣性</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 41</h3>
+    <span class="layout-badge">空白</span>
+    <h4>地震監測的挑戰與機遇</h4>
+    <div class="content">• 地震預警是災害減災的核心組件。隨著深度學習發展，許多研究已成功應用神經網路於監測任務中。
+• 傳統瓶頸：深度學習需要海量標註數據。
+• 資源浪費：地震台站產生大量數據，但多數未經標註。
+• 新技術：自監督學習能從未標註資料中提取特徵。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 42</h3>
+    <span class="layout-badge">空白</span>
+    <h4>自監督學習 (SSL) 的核心優勢</h4>
+    <div class="content">• 無標註學習：無需人工標記正確答案，直接利用數據本身的結構進行訓練。
+• 通用表示：學習具有信息量且通用的特徵表示。
+• 高效微調：只需少量任務導向數據即可達到 State-of-the-art 性能。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 43</h3>
+    <span class="layout-badge">空白</span>
+    <h4>從語音到地震：SeisWav2Vec 2.0</h4>
+    <div class="content">LEM 延續了 Wav2Vec 2.0 在語音處理上的成功，將其核心思想遷移至地震波形分析。
+
+SeisWav2Vec 2.0 是一個基於對比學習 (Contrastive Learning) 的自監督模型，旨在區分正確樣本與干擾項。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 44</h3>
+    <span class="layout-badge">空白</span>
+    <h4>核心組件：模型內部的運作邏輯</h4>
+    <div class="content">• 特徵編碼器：將原始波形轉換為連續 Embedding，捕捉信號的局部結構。
+• 上下文編碼器：內含 12 層 Transformer，引導向量學習全局上下文資訊。
+• 遮罩與量化：離散化特徵並進行遮罩預測任務，模仿自然語言處理的學習方式。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 45–46</h3>
+    <span class="layout-badge">空白</span>
+    <h4>工作流程：從預訓練到任務微調</h4>
+    <div class="content">在預訓練之後接上一個任務導向的 CNN 解碼器，並採用三種策略進行微調</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 47</h3>
+    <span class="layout-badge">空白</span>
+    <h4>性能指標與效率提升預測</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 48</h3>
+    <span class="layout-badge">空白</span>
+    <h4>EEW 多代理協作技術戰略簡報</h4>
+    <div class="content">整合地震監控、自動化派遣與科研分析的閉環系統</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 49</h3>
+    <span class="layout-badge">空白</span>
+    <h4>Agent Matrix — 核心代理角色與職責</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 50</h3>
+    <span class="layout-badge">空白</span>
+    <h4>四位 Agent 的技術定位</h4>
+    <div class="content"><strong>my_agent</strong> — 預警總管：維護監控 Cron、異常推播與日報總結。
+<strong>secondary</strong> — 整合工程師：負責 Hermes 鏈路轉發與跨代理任務派遣。
+<strong>seismo_agent</strong> — 地震學助教：解析 .rep、效能延遲量測與自動繪圖。
+<strong>seismo</strong> — 科學研究員：專注地震數據建模、實驗設計與趨勢預測。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 51</h3>
+    <span class="layout-badge">空白</span>
+    <h4>my_agent: 監控與警報核心</h4>
+    <div class="content">• 監控面 Cron：每 30 分鐘執行健康檢查。
+• Log 判讀：異常時推送最後 50 行日誌至 Telegram。
+• 即時警報：確保 EEW .rep 及時更新觸發分析鏈。
+• 摘要統整：負責所有 Agent 回報後的彙編。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 52</h3>
+    <span class="layout-badge">空白</span>
+    <h4>secondary_agent: 自動化調度中心</h4>
+    <div class="content">• 標準化架構：完成四個 Agent 的啟動腳本、模型設定與環境隔離。利用 delegate_task 實現跨 Agent 互叫機制。
+• 路由分發：開發 seismic-conductor 模組，將結構化數據導向 seismo_agent 進行後續分析。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 53</h3>
+    <span class="layout-badge">空白</span>
+    <h4>seismo_agent: 數據科學流水線</h4>
+    <div class="content">• .rep 轉換：原始檔轉為 CSV/JSON。
+• 圖表產出：自動生成散佈與序列圖。
+• 雙重存檔：同步保存二進位原檔與數據。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 54</h3>
+    <span class="layout-badge">空白</span>
+    <h4>EEW 自動化閉環工作流</h4>
+    <div class="content">事件觸發（偵測 .rep 更新）→ 數據派遣（指派跨節點任務）→ 科學繪圖（生成事件散佈圖表）→ 研究建模（進行長期趨勢預測）→ 彙報發送（產出日報並推播）</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 55</h3>
+    <span class="layout-badge">空白</span>
+    <h4>處理階段耗時分析</h4>
+    <div class="content">資料來源：Seismo-Agent 延遲統計模組 — 處理階段耗時分析 (ms)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 56</h3>
+    <span class="layout-badge">空白</span>
+    <h4>seismo: 科學研究與數據建模</h4>
+    <div class="content">針對「密集小震群」與「深部無感地震」建立統計模型。透過長期趨勢分析，為預警閾值提供動態調整建議。
+
+• 定期產出科學驗證報告
+• 學術論文數據鏈路追蹤</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 57</h3>
+    <span class="layout-badge">空白</span>
+    <h4>eew_report_daily 整合規劃</h4>
+    <div class="content"><table>
+<tr><th>階段</th><th>主責 Agent</th><th>產出內容</th></tr>
+<tr><td>階段 1: 匯總</td><td>my_agent</td><td>系統健康摘要、異常記錄</td></tr>
+<tr><td>階段 2: 分析</td><td>seismo_agent</td><td>震級分布圖、延遲統計</td></tr>
+<tr><td>階段 3: 研究</td><td>seismo</td><td>近期活動趨勢與模型反饋</td></tr>
+<tr><td>階段 4: 組裝</td><td>secondary</td><td>最終日報封裝與推播</td></tr>
+</table></div>
+  </div>
+  <div class="slide">
+    <h3>Slide 58</h3>
+    <span class="layout-badge">空白</span>
+  </div>
+  <div class="slide">
+    <h3>Slide 59–66</h3>
+    <span class="layout-badge">空白</span>
+    <h4>Hermes Agent 團隊會議 — EEW 日常交辦</h4>
+    <div class="content">日期：2026-06-03
+
+<strong>議程</strong>
+1. 確認各 agent 職責與角色
+2. 每日 EEW 工作項目交辦
+3. 回報機制與時程
+4. 後續優化建議與行動方案
+5. Q&A / 討論事項
+
+<strong>各 Agent 角色</strong>
+• <strong>my_agent</strong> — 地震預警總管：監控 Earthworm EEW 流程、分析 .rep 事件、執行延遲量測並主動推播異常與摘要。
+• <strong>seismo</strong> — 地震資料處理工程師：負責 .rep 事件資料結構化轉出，維持 heartbeat loop 穩定運作。
+• <strong>seismo_agent</strong> — Seismology Assistant：管理 EEW Docker 容器健康、恢復流程與 .rep 事件圖表。
+• <strong>secondary_agent</strong> — 系統整合工程師：在本地環境整合、測試並自動化 Hermes 流程。
+
+<strong>每日回報機制</strong>
+<table>
+<tr><th>時間</th><th>作業</th></tr>
+<tr><td>08:00</td><td>Gmail 最新郵件推播</td></tr>
+<tr><td>08:00</td><td>EEW 每日報告</td></tr>
+<tr><td>03:00</td><td>夜間 RT pipeline</td></tr>
+<tr><td>每 30 分鐘</td><td>Earthworm 容器巡檢</td></tr>
+<tr><td>每月 1 日 09:00</td><td>月支出報表</td></tr>
+</table>
+
+<strong>後續行動方案</strong>
+<table>
+<tr><th>優先級</th><th>任務</th><th>負責人</th></tr>
+<tr><td>P0</td><td>確認 eew_report_daily 正確彙整各 agent 回報</td><td>my_agent</td></tr>
+<tr><td>P0</td><td>恢復所有 cron job 常態排程</td><td>secondary_agent</td></tr>
+<tr><td>P1</td><td>提出 EEW 流程改進草案</td><td>secondary_agent</td></tr>
+<tr><td>P1</td><td>評估 host-side 故障恢復腳本</td><td>my_agent / secondary_agent</td></tr>
+<tr><td>P2</td><td>開發新 agent</td><td>my_agent</td></tr>
+</table></div>
+  </div>
+  <div class="slide">
+    <h3>Slide 69</h3>
+    <span class="layout-badge">DEFAULT</span>
+    <h4>AI × WORKFLOW · 2022 → 2026</h4>
+    <div class="content"><strong>2022–2024 對話時代</strong> — ChatGPT 登場，寫程式、查指令、翻譯、寫英文信都用「問」的。AI 是助理，人類是手腳。
+
+<strong>2024–2025 整合介面</strong> — Agent 進入 IDE（Cursor、Windsurf、GitHub Copilot Agent Mode）。AI 開始接管「執行」那一段工作。
+
+<strong>2025–2026 自主 Agent</strong> — 任務交給它跑完。專門化 agent 出現，Claude Code 等 CLI agent 能獨立完成多步驟任務。
+
+思維轉換：別再問「我要怎麼做這件事」，改問「要交給哪個 agent、怎麼驗收？」</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 70</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地生系同學作業分享 — Hugging Face Space</h4>
+    <div class="content">https://huggingface.co/spaces/Sapphirejimmy/seismology_HW10</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 71</h3>
+    <span class="layout-badge">TITLE_AND_BODY</span>
+    <h4>謝謝聆聽，敬請指教</h4>
+  </div>
+</section>
+
+<section class="presentation">
+  <div class="presentation-header">
+    <h2>臺灣地震預警系統的演進與發展</h2>
+    <div class="sub">2026/06/12 · 陳達毅 科長 · 嘉義縣政府天然災害停班停課通報作業講習</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 1</h3>
+    <span class="layout-badge">標題投影片</span>
+    <div class="content"><strong>臺灣地震預警系統的演進與發展</strong>
+
+陳達毅 科長
+
+中央氣象署 地震測報中心
+
+嘉義縣政府115度 — 天然災害停止上班及上課通報作業講習</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 2</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>在地震中心工作面臨的挑戰</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 3</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>競速開始</h4>
+    <div class="content">1999.9.21 集集地震
+
+2024.4.3 花蓮地震</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 4</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>競速開始</h4>
+    <div class="content">2024.4.3 花蓮地震</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 5</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用即時逐秒觀測震度輔助地震預警系統</h4>
+    <div class="content">地震災害必須同時考慮強度與持續時間
+
+2024.4.3 花蓮地震</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 6</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險</h4>
+    <div class="content">菲律賓海板塊與歐亞大陸板塊每年約以7至8公分的速度聚合，兩板塊持續擠壓碰撞導致臺灣地震頻繁發生。
+
+臺灣東部海域菲律賓海板塊向北隱沒到歐亞大陸板塊下，南部海域歐亞大陸板塊向東隱沒到菲律賓海板塊下。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 7</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險 — GNSS 絕對水平速度場</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 8</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險</h4>
+    <div class="content">1900年以來共發生7次大規模災害地震（罹難百人以上）
+
+• 每天 100 個地震
+• 每年 100 個顯著有感地震
+• 每 30~40 年 1 個大規模災害性地震</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 9</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 10</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣的地震環境與風險 – 過去10年災害地震</h4>
+    <div class="content">• 2016/2/6 M6.6 美濃地震 (7級) — 621人員傷亡、749戶房屋損失
+• 2018/2/6 M6.2 花蓮地震 (7級) — 308人員傷亡、195戶房屋損失
+• 2019/4/18 M6.3 花蓮地震 (7級) — 29人員傷亡
+• 2022/9/18 M6.8 池上地震 (6強) — 108人員傷亡、34戶房屋損失
+• 2024/4/3 M7.1 花蓮地震 (6強) — 1069人員傷亡、207戶房屋損失
+• 2025/1/21 M6.4 大埔地震 (6弱) — 1810戶房屋損失</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 11</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>近年來嘉南地區災害性地震</h4>
+    <div class="content">2010, March, 4th M6.3 JiaXian Earthquake (Wu et al., 2011)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 12</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>近年來嘉南地區災害性地震</h4>
+    <div class="content">2016, February, 6th M6.6 Meinong Earthquake (Kanamori et al., 2017)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 13</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>近年來嘉南地區災害性地震</h4>
+    <div class="content">2025, January, 21st M6.4 Dapu Earthquake (Su et al., 2025)</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 14–15</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震測報中心工作環境</h4>
+    <div class="content">員工人數約60人，24小時作業，全年無休</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 16</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震監測畫面</h4>
+    <div class="content">地震發生時值班同仁可以立刻掌握相關資訊</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 17</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>即時地震觀測網 — 巨量資料</h4>
+    <div class="content">約有3000個觀測頻道，每個頻道接收100H取樣率資料</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 18</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>強震即時警報原理</h4>
+    <div class="content">地震發生時會同時產生P波（縱波）與S波（橫波），其中P波傳播速度快震幅小，S波則相反，因此若能藉由P波所提供的資訊推估地震大小並且快速地發送訊息，就有機會於災害性震波抵達前收到地震警報，採取應變。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 19</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>強震即時警報發布條件與管道</h4>
+    <div class="content">113年8月16日 07時35分55秒 規模6.3 地震位於東部海域
+
+發布條件：規模6震度3級以上</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 20–22</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>強震即時警報 — 2024.4.3 花蓮地震</h4>
+    <div class="content">國家級警報、網路推播、電視臺推播</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 23</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>與地震波賽跑 — 警報發布時效從 102 秒縮短至 7 秒</h4>
+    <div class="content">臺灣歷經三十年的測站布建、演算法革新與加密觀測，警報發布時效已從 102 秒大幅壓縮至 7 秒，下一階段正邁向 AI 驅動的預警技術與現地型預警系統。
+
+預警盲區大幅縮小：發布時效從10秒縮短至7秒，盲區半徑由 35 公里縮減至 25 公里，面積減少逾 50%。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 24</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>以114年12月27日規模7.0地震為例</h4>
+    <div class="content"><table>
+<tr><th>報數</th><th>發布時效</th><th>預估規模</th></tr>
+<tr><td>第1報（國家級警報）</td><td>15.5秒</td><td>6.7</td></tr>
+<tr><td>第2報（國家級警報）</td><td>16.6秒</td><td>7.6</td></tr>
+</table></div>
+  </div>
+  <div class="slide">
+    <h3>Slide 25–27</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>科技極限與複合型災害 – 誤報</h4>
+    <div class="content">111年9月18日 雲嘉南地區誤發國家級警報
+
+短時間內發生兩個地震造成誤報</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 28–29</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>科技極限與複合型災害 – 漏報</h4>
+    <div class="content">短時間內發生兩個地震造成漏報。兩個地震相差 4 秒，地震預警系統僅處理第一個地震，因此後面大的地震就漏掉了。</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 30</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>科技極限與複合型災害 – 海嘯</h4>
+    <div class="content">2004年南亞海嘯、2011年日本海嘯
+
+成因：地震規模夠大 + 震源深度夠淺 + 海床垂直錯動</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 31</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>科技極限與複合型災害 – 臺灣海嘯威脅</h4>
+    <div class="content">• 臺灣東部：琉球海溝
+• 臺灣東南部：亞普海溝
+• 臺灣南部：馬尼拉海溝</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 32</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>臺灣海嘯警戒分區劃分與預估波高分級</h4>
+    <div class="content">根據海嘯威脅可能性與周圍海底地形等因素，劃分6個海嘯警戒分區
+
+預估波高等級：參考國際海嘯預警作業及臺灣海嘯觀測經驗，制訂為4級（114年2月1日修正）</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 33</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>海嘯警報範例</h4>
+    <div class="content">警報報序（年度+序號）→ 發布警報時間 → 海嘯地震資訊 → 臺灣6個海嘯警戒分區 → 預估海嘯波到達時間 → 預估海嘯波波高和分級</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 34</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>海嘯警報實例 — 2024/4/3 M7.2 花蓮地震</h4>
+    <div class="content">07:58 地震發生 → 08:11 海嘯警報第1報 → 10:00 海嘯警報第2報 → 11:10 海嘯警報解除</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 35</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>海嘯警報實例 — 2025/7/30 M8.8 堪察加半島地震</h4>
+    <div class="content">07:25 地震 → 07:38 海嘯消息 → 08:23 海嘯消息 → 09:12 海嘯警訊 → 11:40 海嘯警報 → 17:10 海嘯警報解除</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 36</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>掌握關鍵應變與整備 – 最後一哩路</h4>
+    <div class="content">發布管道：地震報告、強震警報、震度速報、網路推播、手機細胞廣播、電視台插播、App、臉書粉絲團、氣象署官網、手機簡訊、LINE Notify</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 37</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>掌握關鍵應變與整備 – 直送防救災需求單位</h4>
+    <div class="content">地震速報資訊直接發送單位超過 4,500 個：
+• 高中小學 (~4,100所)
+• 防救災單位 (~40個)
+• 臺鐵、高鐵、捷運</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 38–41</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>掌握關鍵應變與整備 — 防災教育宣導</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 42</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>常見 Q&A – 民間業者 APP 比較快收到警報？</h4>
+    <div class="content">以114年12月27日規模7.0地震為例，屏東縣竹田鄉履豐村鄉下長輩沒手機，屏東青年自架「村里地震廣播預警系統」</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 43–45</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>地震預警系統演算邏輯</h4>
+    <div class="content">採用機器學習模型預估震度
+
+Epicenter → Use 3 sec P wave → Have 15 sec leading time → Use an AI Model → Provide Warnings !</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 46–47</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>利用即時逐秒觀測震度輔助地震預警系統</h4>
+    <div class="content">利用地震發生初期的觀測震度分佈評估是否該發布警報</div>
+  </div>
+  <div class="slide">
+    <h3>Slide 48</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>結語 — 持續精進地震速警報效能</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 49</h3>
+    <span class="layout-badge">標題及內容</span>
+    <h4>結語 — 持續加強公私協力合作</h4>
+  </div>
+  <div class="slide">
+    <h3>Slide 50</h3>
+    <span class="layout-badge">TITLE_AND_BODY</span>
+    <h4>謝謝聆聽，敬請指教</h4>
+  </div>
+</section>
+
+<div class="footer">
+  <p>中央氣象署 地震測報中心 · 陳達毅 科長</p>
+</div>
+
+</div>
+</body>
+</html>
