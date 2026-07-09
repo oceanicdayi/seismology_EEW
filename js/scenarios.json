@@ -1,0 +1,87 @@
+[
+  {
+    "id": "scenario_01",
+    "name": "2024/4/3 花蓮地震 (M7.2)",
+    "nameEn": "2024/4/3 Hualien Earthquake (M7.2)",
+    "source": "CWA地震報告",
+    "trueLon": 121.67,
+    "trueLat": 23.77,
+    "trueDepth": 15.5,
+    "trueML": 7.2,
+    "stations": [
+      { "id": "HWA", "lon": 121.61, "lat": 23.98, "trueP": 1.2, "trueS": 2.3 },
+      { "id": "TTN", "lon": 121.15, "lat": 22.75, "trueP": 4.8, "trueS": 8.5 },
+      { "id": "ILA", "lon": 121.76, "lat": 24.76, "trueP": 3.5, "trueS": 6.2 },
+      { "id": "TAP", "lon": 121.52, "lat": 25.04, "trueP": 5.1, "trueS": 9.0 },
+      { "id": "TAI", "lon": 120.68, "lat": 24.15, "trueP": 6.3, "trueS": 11.1 }
+    ]
+  },
+  {
+    "id": "scenario_02",
+    "name": "2025/1/21 大埔地震 (M6.4)",
+    "nameEn": "2025/1/21 Dapu Earthquake (M6.4)",
+    "source": "CWA地震報告",
+    "trueLon": 120.53,
+    "trueLat": 23.23,
+    "trueDepth": 12.3,
+    "trueML": 6.4,
+    "stations": [
+      { "id": "CHY", "lon": 120.42, "lat": 23.48, "trueP": 1.5, "trueS": 2.7 },
+      { "id": "TTN", "lon": 121.15, "lat": 22.75, "trueP": 4.2, "trueS": 7.4 },
+      { "id": "TCU", "lon": 120.68, "lat": 24.15, "trueP": 3.8, "trueS": 6.7 },
+      { "id": "KSH", "lon": 120.32, "lat": 22.62, "trueP": 5.5, "trueS": 9.7 },
+      { "id": "HWA", "lon": 121.61, "lat": 23.98, "trueP": 5.0, "trueS": 8.8 }
+    ]
+  },
+  {
+    "id": "scenario_03",
+    "name": "2016/2/6 美濃地震 (M6.6)",
+    "nameEn": "2016/2/6 Meinong Earthquake (M6.6)",
+    "source": "CWA地震報告",
+    "trueLon": 120.28,
+    "trueLat": 22.93,
+    "trueDepth": 14.6,
+    "trueML": 6.6,
+    "stations": [
+      { "id": "KSH", "lon": 120.32, "lat": 22.62, "trueP": 2.1, "trueS": 3.7 },
+      { "id": "CHY", "lon": 120.42, "lat": 23.48, "trueP": 3.5, "trueS": 6.2 },
+      { "id": "TTN", "lon": 121.15, "lat": 22.75, "trueP": 4.8, "trueS": 8.5 },
+      { "id": "TCU", "lon": 120.68, "lat": 24.15, "trueP": 5.9, "trueS": 10.4 },
+      { "id": "TAP", "lon": 121.52, "lat": 25.04, "trueP": 7.2, "trueS": 12.7 }
+    ]
+  },
+  {
+    "id": "scenario_04",
+    "name": "2022/9/18 池上地震 (M6.8)",
+    "nameEn": "2022/9/18 Chihshang Earthquake (M6.8)",
+    "source": "CWA地震報告",
+    "trueLon": 121.17,
+    "trueLat": 23.08,
+    "trueDepth": 7.0,
+    "trueML": 6.8,
+    "stations": [
+      { "id": "TTN", "lon": 121.15, "lat": 22.75, "trueP": 2.0, "trueS": 3.5 },
+      { "id": "HWA", "lon": 121.61, "lat": 23.98, "trueP": 3.8, "trueS": 6.7 },
+      { "id": "CHY", "lon": 120.42, "lat": 23.48, "trueP": 4.5, "trueS": 7.9 },
+      { "id": "TCU", "lon": 120.68, "lat": 24.15, "trueP": 5.5, "trueS": 9.7 },
+      { "id": "ILA", "lon": 121.76, "lat": 24.76, "trueP": 6.1, "trueS": 10.8 }
+    ]
+  },
+  {
+    "id": "scenario_05",
+    "name": "2018/2/6 花蓮地震 (M6.2)",
+    "nameEn": "2018/2/6 Hualien Earthquake (M6.2)",
+    "source": "CWA地震報告",
+    "trueLon": 121.72,
+    "trueLat": 24.10,
+    "trueDepth": 6.3,
+    "trueML": 6.2,
+    "stations": [
+      { "id": "HWA", "lon": 121.61, "lat": 23.98, "trueP": 0.8, "trueS": 1.4 },
+      { "id": "ILA", "lon": 121.76, "lat": 24.76, "trueP": 2.5, "trueS": 4.4 },
+      { "id": "TAP", "lon": 121.52, "lat": 25.04, "trueP": 4.1, "trueS": 7.2 },
+      { "id": "TCU", "lon": 120.68, "lat": 24.15, "trueP": 4.8, "trueS": 8.5 },
+      { "id": "CHY", "lon": 120.42, "lat": 23.48, "trueP": 6.2, "trueS": 10.9 }
+    ]
+  }
+]
