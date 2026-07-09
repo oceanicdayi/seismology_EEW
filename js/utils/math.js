@@ -32,7 +32,7 @@ const SeismicMath = {
         if (st.pickedP === null) continue;
         const d = this.distance(lon, lat, st.lon, st.lat);
         const tCalc = this.travelTimeP(d, depth);
-        const tObs = st.pickedP / 1000;
+        const tObs = st.pickedP;
         const residual = tObs - tCalc;
         totalError += Math.abs(residual);
 
@@ -63,6 +63,8 @@ const SeismicMath = {
       const inv = _inverse3x3(AtA, det);
       const dx = _multVecMat(inv, Atb);
 
+      if (isNaN(dx[0]) || isNaN(dx[1]) || isNaN(dx[2])) break;
+
       lon += dx[0];
       lat += dx[1];
       depth += dx[2];
@@ -71,6 +73,10 @@ const SeismicMath = {
 
       if (Math.abs(totalError - prevError) < 0.001) break;
       prevError = totalError;
+    }
+
+    if (isNaN(lon) || isNaN(lat) || lon < 118 || lon > 124 || lat < 20 || lat > 28) {
+      return { lon: lon0, lat: lat0, depth: 10, errorKm: NaN };
     }
 
     const finalDists = stations.filter(s => s.pickedP !== null).map(s =>
